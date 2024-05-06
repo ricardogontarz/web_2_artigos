@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../public/stylesheets/style.css">
+    <link rel="stylesheet" href="../public/stylesheets/listaUsers.css">
+    <title>Lista de Usuários</title>
+</head>
+<body>
+
+<section class="choquei">
+    <header>
+        <div>
+            <a href="/home"><h1>Choquei</h1></a>
+            <% if ( user ) { %>
+                <h3><%= user.tipo %></h3>
+            <% } %>
+        </div>
+        <div class="btn-layout">
+            <button class="header-btn add-user" onclick="window.location.href='/auth/signup'">Adicionar</button>
+            <% if ( user ) { %>
+                <form action="/auth/logout" method="post">
+                    <button type="submit" class="header-btn">Logout</button>
+                </form>
+            <% }else { %>
+                <button onclick=window.location.href='/auth/login' class="header-btn">Login</button>
+            <% }; %>
+        </div>
+
+    </header>
+    <h1>Lista de Usuários</h1>
+
+    <section class="artigos">
+        <% users.forEach(user => { %>
+            <div class="card">
+                <p><strong>Nome:</strong> <%= user.nome %></p>
+                <p><strong>Email:</strong> <%= user.email %></p>
+                <p><strong>Tipo:</strong> <%= user.tipo %></p>
+                <div class="button-container">
+                    <button class="delete-button" type="button" onclick="deleteUser('<%= user.id %>')">Deletar</button>
+                    <button class="update-button" type="button" onclick="updateUser('<%= user.id %>')">Atualizar</button>
+                </div>
+            </div>
+        <% }); %>
+    </section>
+</section>
+
+
+<script>
+    function updateUser(userId) {
+        window.location.href = `/admin/users/${userId}`;
+    }
+
+    function deleteUser(userId) {
+        if (confirm('Tem certeza que deseja excluir este usuário?')) {
+            fetch(`/usuarios/${userId}`, {
+                method: 'DELETE'
+            })
+                .then(response => {
+                    if (response.ok) {
+                        window.location.reload();
+                    } else {
+                        throw new Error('Erro ao excluir usuário.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro ao excluir usuário:', error);
+                    alert('Erro ao excluir usuário. Verifique o console para mais detalhes.');
+                });
+        }
+    }
+
+</script>
+
+</body>
+</html>

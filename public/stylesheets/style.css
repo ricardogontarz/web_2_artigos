@@ -1,0 +1,295 @@
+/* Estilos gerais */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f7f7f7;
+}
+
+.choquei {
+  max-width: 1450px;
+  margin: 1rem auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+}
+
+header {
+  text-align: center;
+  margin-bottom: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.artigos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+.header-btn {
+  padding: 0.8rem;
+  border: none;
+  border-radius: 0.5rem;
+  background-color: #f9f9f9; /* Cor de fundo  */
+  color: #007bff; /* Cor do texto  */
+  font-size: 1rem;
+  font-weight: bold;
+  text-transform: uppercase; /* Texto em maiúsculas */
+  cursor: pointer;
+  transition: background-color 0.3s ease; /* Transição suave de cor de fundo */
+}
+
+/* Estilo quando o mouse passa por cima */
+.header-btn:hover {
+  background-color: #c9c9c9; /* Cor de fundo verde mais escura */
+  color: #0056b2;
+}
+
+/* Estilo quando clicado */
+.header-btn:active {
+  background-color: #7e7e7e; /* Cor de fundo verde ainda mais escura */
+}
+.btn-layout{
+  display: flex;
+  gap: 1rem;
+}
+.card {
+  padding: 20px;
+  border-radius: 10px;
+  background-color: #f9f9f9;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.card:hover {
+  background-color: #fcfcfc;
+  transform: scale(1.05);
+}
+.card:active{
+  background-color: #d1aaaa;
+}
+.card-resumo{
+  min-height: 2rem;
+  max-height: 2rem;
+
+}
+
+.card-titulo{
+  min-height: 3rem;
+  max-height: 3rem;}
+
+
+h1 {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+  color: #007bff;
+}
+
+h2 {
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+  color: #007bff;
+}
+
+p {
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+  color: #666;
+}
+
+a {
+  text-decoration: none;
+  color: #007bff;
+}
+
+/* Estilos para as tags de status */
+.tag {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+.tag-revisao {
+  color: darkslateblue;
+  background-color: #f0f8ff;
+}
+
+.tag-aceito {
+  color: green;
+  background-color: #e6ffe6;
+}
+
+.tag-rejeitado {
+  color: red;
+  background-color: #ffe6e6;
+}
+
+/* Estilos para dispositivos de largura menor ou igual a 768px */
+@media only screen and (max-width: 768px) {
+  .choquei {
+    padding: 10px;
+  }
+
+  header {
+    margin-bottom: 20px;
+  }
+
+  h1 {
+    font-size: 2rem;
+    margin-bottom: 15px;
+    color: #333;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+    margin-bottom: 8px;
+    color: #444;
+  }
+
+  p {
+    font-size: 1rem;
+    margin-bottom: 15px;
+    color: #666;
+  }
+}
+
+
+/* Estilos para os botões */
+.button-container {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+.delete-button, .update-button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.delete-button {
+  background-color: #ff6347;
+  color: #fff;
+}
+
+.delete-button:hover {
+  background-color: #a32519;
+  color: #ffffff;
+}
+
+.delete-button:active{
+  background-color: #d17067;
+  color: #ffffff;
+}
+.update-button {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.btn-approve{
+  background-color: #49ac06;
+  color: #ffffff;
+}
+
+.btn-approve:hover{
+  background-color: #43930d;
+  color: #ffffff;
+}
+
+.btn-approve:active{
+  background-color: #58bf11;
+  color: #ffffff;
+}
+.btn-reject{
+  background-color: #800053;
+  color: #ffffff;
+}
+.btn-reject:hover{
+  background-color: #45022d;
+  color: #ffffff;
+}
+.btn-reject:active{
+  background-color: #df1e9b;
+  color: #ffffff;
+}
+
+.update-button:hover {
+  background-color: #0056b3;
+}
+/* Estilos para o contêiner do formulário */
+.form-container {
+  max-width: 400px;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+
+/* Estilos para o seletor de avaliador */
+.avaliador-select {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+/* Estilos para o botão de adicionar */
+.btn-adicionar {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff;
+  color: #fff;
+  cursor: pointer;
+}
+
+/* Estilos para o botão de adicionar quando hover */
+.btn-adicionar:hover {
+  background-color: #0056b3;
+}
+
+/* Estilos para o formulário de avaliação */
+.evaluation-form {
+  margin-top: 20px;
+}
+
+.evaluation-form label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.evaluation-form input[type="number"] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.evaluation-form button[type="submit"] {
+  background-color: #4CAF50; /* Cor de fundo verde */
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.evaluation-form button[type="submit"]:hover {
+  background-color: #45a049; /* Cor de fundo verde escuro ao passar o mouse */
+}
+
+/* Estilos responsivos */
+@media screen and (max-width: 600px) {
+  .evaluation-form input[type="number"],
+  .evaluation-form button[type="submit"] {
+    width: 100%;
+  }
+}

@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Atualiza</title>
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/signup.css">
+    <style>/* base.css */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+        }
+
+        /* signup.css */
+        .prompt {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+
+        h3 {
+            margin-top: 0;
+            color: #007bff;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        section {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+            width: calc(100% - 10px);
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        button[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        .help {
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+        }
+
+        .help a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .help a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+<section class="prompt">
+    <h3>Atualizar <%=user.nome%>!</h3>
+    <form id="updateForm">
+        <section>
+            <label for="nome">Nome</label>
+            <input id="nome" name="nome" type="text" value="<%=user.nome%>" required>
+        </section>
+        <section>
+            <label for="email">Email</label>
+            <input id="email" name="email" value="<%=user.email%>"  type="email" required>
+        </section>
+        <section>
+            <label for="login">Login</label>
+            <input id="login" name="login" value="<%=user.login%>"  type="text" required>
+        </section>
+        <section>
+            <label for="senha">Senha</label>
+            <input id="senha" name="senha" value="<%=user.senha%>"  type="password" required>
+        </section>
+        <section>
+            <label for="tipo">Tipo</label>
+            <input id="tipo" name="tipo" type="text" value="<%=user.tipo%>"  required>
+            <input type="hidden" id="userId" name="userId" value="<%=user.id%>">
+        </section>
+        <button type="button" onclick="submitForm()">Update</button>
+    </form>
+    <a href="/home">voltar</a>
+    <hr>
+</section>
+<script>
+    function submitForm() {
+        const form = document.getElementById('updateForm');
+        const userId = document.getElementById('userId').value;
+        const formData = new FormData(form);
+
+        fetch(`/usuarios/${userId}`, {
+            method: 'PUT',
+            body: formData
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Erro ao atualizar usuário');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Usuário atualizado:', data);
+                // Faça qualquer outra ação necessária após a atualização do usuário
+            })
+            .catch(error => {
+                console.error('Erro ao atualizar usuário:', error);
+            });
+    }
+</script>
+</body>
+</html>

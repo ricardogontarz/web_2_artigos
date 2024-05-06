@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Choquei</title>
+    <link rel="stylesheet" href="../public/stylesheets/style.css">
+    <link rel="stylesheet" href="../public/stylesheets/artigo.css">
+</head>
+
+<body>
+<section class="choquei">
+    <header>
+        <div>
+            <a href="/home">
+                <h1>Choquei</h1>
+            </a>
+            <% if ( user ) { %>
+                <h3><%= user.tipo %></h3>
+            <% } %>
+        </div>
+        <div class="btn-layout">
+            <% if ( user ) { %>
+                <form action="/auth/logout" method="post">
+                    <button type="submit" class="header-btn">Logout</button>
+                </form>
+            <% }else { %>
+                <button onclick=window.location.href='/auth/login' class="header-btn">Login</button>
+            <% }; %>
+        </div>
+    </header>
+    <section>
+        <section class="art-sec">
+            <h2><i><strong>Nota: </strong> <%= artigo.n1 * artigo.n2 %></i></h2>
+            <div class="art-body">
+                <h2 class="art-titulo"><%= artigo.titulo %></h2>
+                <p class="art-resumo"><%= artigo.resumo %></p>
+                <a class="art-link" href="<%= artigo.link %>"><%= artigo.link %></a>
+            </div>
+            <div class="btn-layout">
+                <% if (user) { %>
+                    <% if (user.tipo == 'Administrador' || user.tipo == 'Autor') { %>
+                    <form id="deleteForm" action="/artigos/<%=artigo.id%>" method="DELETE">
+                        <button id="deleteButton" class="header-btn delete-button">Deletar</button>
+                    </form>
+                    <% if (user.tipo == 'Autor') { %>
+                        <button id="editButton" class="header-btn update-button " onclick=window.location.href='/artigo/<%=artigo.id%>/edit'>Editar</button>
+                    <% } %>
+                    <% if (user.tipo == 'Administrador' && artigo.status === 'Em revisão') { %>
+                    <form id="rejectForm" action="/artigos/<%=artigo.id%>/status" method="PATCH">
+                        <button type="submit" class="header-btn btn-reject ">Rejeitar</button>
+                    </form>
+                    <form id="approveForm" action="/artigos/<%=artigo.id%>/status" method="PATCH">
+                        <button type="submit" class="header-btn btn-approve">Publicar</button>
+                    </form>
+                    <% } %>
+                    <% } %>
+                    <% if (user.tipo == 'Avaliador' && artigo.status === 'Em revisão') { %>
+                    <form id="evaluationForm" class="evaluation-form" action="/artigos/<%=artigo.id%>/nota" method="PUT">
+                        <label for="n1">N1:</label>
+                        <input type="number" max="10" min="1" id="n1" name="n1" required>
+                        <label for="n2">N2:</label>
+                        <input type="number" max="10" min="1" id="n2" name="n2" required>
+                        <button type="submit" id="evaluateButton">Avaliar</button>
+                    </form>
+                    <% } %>
+
+                <% } %>
+            </div>
+            <% if (user.tipo == 'Administrador' && artigo.status === 'Em revisão') { %>
+                <div class="form-container">
+                    <h2>Adicionar avaliador</h2>
+                    <form class="avaliador-form" action='/artigos/<%= artigo.id %>/avaliador' method="POST">
+                        <label for="avaliador">Selecione um Avaliador:</label>
+                        <select name="avaliador" id="avaliador" class="avaliador-select">
+                            <% if (avaliadores && avaliadores.length > 0) { %>
+                                <% avaliadores.forEach(avaliador => { %>
+                                    <option value="<%= avaliador.id %>"><%= avaliador.nome %></option>
+                                <% }); %>
+                            <% } else { %>
+                                <option value="">Nenhum avaliador disponível</option>
+                            <% } %>
+                        </select>
+                        <button type="submit" class="header-btn btn-adicionar">Adicionar</button>
+                    </form>
+                </div>
+            <% } %>
+        </section>
+
+    </section>
+</section>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const rejectForm = document.getElementById('rejectForm');
+        const approveForm = document.getElementById('approveForm');
+        const deleteForm = document.getElementById('deleteForm');
+
+        // Event listener para o formulário de rejeição
+        if (rejectForm) {
+            rejectForm.addEventListener('submit', async (event) => {
+                event.preventDefault(); // Evita que o formulário seja submetido
+                try {
+                    const response = await fetch(rejectForm.action, {
+                        method: 'PATCH',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ novoStatus: 'Rejeitado' })
+                    });
+                    if (response.ok) {
+                        console.log('Artigo rejeitado com sucesso');
+                        window.location.reload(); // Recarrega a página após a ação
+                    } else {
+                        throw new Error(response.statusText);
+                    }
+                } catch (error) {
+                    console.error('Erro ao rejeitar o artigo:', error);
+                }
+            });
+        }
+
+        // Event listener para o formulário de aprovação
+        if (approveForm) {
+            approveForm.addEventListener('submit', async (event) => {
+                event.preventDefault(); // Evita que o formulário seja submetido
+                try {
+                    const response = await fetch(approveForm.action, {
+                        method: 'PATCH',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ novoStatus: 'Publicado' })
+                    });
+                    if (response.ok) {
+                        console.log('Artigo publicado com sucesso');
+                        window.location.reload(); // Recarrega a página após a ação
+                    } else {
+                        throw new Error(response.statusText);
+                    }
+                } catch (error) {
+                    console.error('Erro ao publicar o artigo:', error);
+                }
+            });
+        }
+
+
+        // Event listener para o formulário de exclusão
+        if (deleteForm) {
+            deleteForm.addEventListener('submit', async (event) => {
+                event.preventDefault(); // Evita que o formulário seja submetido
+                try {
+                    const response = await fetch(deleteForm.action, { method: 'DELETE' });
+                    if (response.ok) {
+                        console.log('Artigo excluído com sucesso');
+                        window.location.href = "/home"; // Redireciona o usuário de volta à página inicial após excluir o artigo
+                    } else {
+                        throw new Error(response.statusText);
+                    }
+                } catch (error) {
+                    console.error('Erro ao excluir o artigo:', error);
+                }
+            });
+        }
+    });
+
+
+    if (evaluationForm) {
+        evaluationForm.addEventListener('submit', async (event) => {
+            event.preventDefault(); // Evita que o formulário seja submetido normalmente
+
+            // Obtém os valores dos campos de nota
+            const n1 = parseFloat(document.getElementById('n1').value);
+            const n2 = parseFloat(document.getElementById('n2').value);
+
+            try {
+                // Envia uma solicitação PUT para a rota apropriada com os dados da nota
+                const response = await fetch(evaluationForm.action, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({n1, n2})
+                });
+
+                if (response.ok) {
+                    // Se a solicitação for bem-sucedida, obtém a resposta JSON com a nota calculada
+                    const data = await response.json();
+                    window.location.reload()
+                    // Exibe a nota calculada na página
+                } else {
+                    throw new Error(response.statusText);
+                }
+            } catch (error) {
+                console.error('Erro ao avaliar o artigo:', error);
+            }}
+        )}
+</script>
+</body>
+
+</html>

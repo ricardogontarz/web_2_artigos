@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Choquei</title>
+    <link rel="stylesheet" href="../public/stylesheets/style.css">
+</head>
+<body>
+<section class="choquei">
+    <header>
+        <div>
+            <a href="/home"><h1>Choquei</h1></a>
+            <% if ( usuario ) { %>
+                <h3><%= usuario.tipo %></h3>
+            <% } %>
+        </div>
+        <div class="btn-layout">
+            <% if (usuario && usuario.tipo === 'Autor') { %>
+                <button type="button" class="header-btn " onclick=window.location.href='/artigo/add'>Adicionar</button>
+            <% } %>
+            <% if (usuario && usuario.tipo === 'Administrador') { %>
+                <button type="button" class="header-btn " onclick=window.location.href='/admin/users'>Users</button>
+            <% } %>
+            <% if ( usuario ) { %>
+                <form action="/auth/logout" method="post">
+                    <button type="submit" class="header-btn logout-btn">Logout</button>
+                </form>
+            <% }else { %>
+                <button onclick=window.location.href='/auth/login' class="header-btn login-btn">Login</button>
+            <% }; %>
+        </div>
+
+    </header>
+    <section class="artigos">
+        <% if (usuario && artigos && artigos.length > 0) { %>
+            <% artigos.forEach(artigo => { %>
+                <a href="/artigo/<%= artigo.id %>">
+                    <div class="card">
+                        <h2 class="card-titulo">
+                            <% if (artigo.titulo.length > 30){ %>
+                                <%= artigo.titulo.substring(0, 31).trim() + '...' %>
+                            <% }else{ %>
+                                <%= artigo.titulo %>
+                            <% } %>
+                        </h2>
+                        <p class="card-resumo">
+                            <% if (artigo.resumo.length > 30){ %>
+                                <%= artigo.resumo.substring(0, 61).trim() + '...' %>
+                            <% }else{ %>
+                                <%= artigo.resumo %>
+                            <% } %>
+                        </p>
+                        <% if (artigo.status === 'Em revisão') { %>
+                            <p class="tag tag-revisao">Em revisão</p>
+                        <% } else if (artigo.status === 'Publicado') { %>
+                            <p class="tag tag-aceito">Publicado</p>
+                        <% } else if (artigo.status === 'Rejeitado') { %>
+                            <p class="tag tag-rejeitado">Rejeitado</p>
+                        <% } %>
+                        <% if (usuario.tipo === 'Administrador') { %>
+                        <p class="card-nota"><i><strong>Nota:</strong> <%= (artigo.n1*artigo.n2).toFixed(2) %></i></p>
+                        <% } %>
+
+                    </div>
+                </a>
+
+            <% }); %>
+        <% } else { %>
+            <p>Artigos não encontrados</p>
+        <% } %>
+    </section>
+</section>
+</body>
+</html>

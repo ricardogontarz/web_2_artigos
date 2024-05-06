@@ -1,0 +1,21 @@
+
+
+.art-sec {
+    max-width: 1300px;
+    margin: 0 auto;
+
+}
+
+.art-link {
+    color: #007bff;
+    display: block;
+}
+
+.art-body {
+    text-align: center;
+    background-color: #fcfcfc;
+    border-radius: 1rem;
+    padding: 0.3rem;
+    margin-bottom: 1rem;
+    margin: 1rem auto;
+}
