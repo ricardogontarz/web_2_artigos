@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Atualizar Usuário</title>
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/signup.css">
+    <style>/* base.css */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+        }
+
+        /* signup.css */
+        .prompt {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        select{
+            margin-top: auto;
+            width: 100%;
+            text-align: center;
+            height: 40px;
+        }
+        h3 {
+            margin-top: 0;
+            color: #007bff;
+            text-align: center;
+            font-size: 30px;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        section {
+            margin-bottom: 20px;
+        }
+
+        label {
+            text-align: center;
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+            width: 95%;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        button[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        .help {
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+        }
+
+        .help a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .help a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+<section class="prompt">
+    <h3>Atualizar Usuário</h3>
+    <form id="updateUserForm" action="/usuarios/<%= usuario.id %>" method="PUT">
+        <section>
+            <label for="nome">Nome</label>
+            <input id="nome" name="nome" type="text" value="<%= usuario.nome %>" required>
+        </section>
+        <section>
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" value="<%= usuario.email %>" required>
+        </section>
+        <section>
+            <label for="login">Login</label>
+            <input id="login" name="login" type="text" value="<%= usuario.login %>" required>
+        </section>
+        <section>
+            <label for="senha">Nova Senha</label>
+            <input id="senha" name="senha" type="text" value="<%=usuario.senha%>">
+        </section>
+        <section>
+            <label for="tipo">Tipo</label>
+            <select name="tipo">
+                <option value="Administrador" <% if(usuario.tipo === 'Administrador') { %> selected <% } %>>Administrador</option>
+                <option value="Autor" <% if(usuario.tipo === 'Autor') { %> selected <% } %>>Autor</option>
+                <option value="Avaliador" <% if(usuario.tipo === 'Avaliador') { %> selected <% } %>>Avaliador</option>
+            </select>
+        </section>
+        <% if (messages.error) { %>
+            <div class="error-message">
+                <%= messages.error %>
+            </div>
+        <% } %>
+        <button type="button" onclick="updateUser()">Atualizar</button>
+    </form>
+    <br>
+</section>
+
+<script>
+    function updateUser() {
+        const form = document.getElementById('updateUserForm');
+        const formData = new FormData(form);
+
+        fetch(form.action, {
+            method: 'PUT',
+            body: formData
+        })
+            .then(response => {
+                if (response.ok) {
+                    alert('Usuário atualizado com sucesso!');
+                    window.location.href='/admin/users';
+                } else {
+                    throw new Error('Erro ao atualizar usuário.');
+                }
+            })
+            .catch(error => {
+                console.error('Erro ao atualizar usuário:', error);
+                alert('Erro ao atualizar usuário. Verifique o console para mais detalhes.');
+            });
+    }
+</script>
+</body>
+</html>
